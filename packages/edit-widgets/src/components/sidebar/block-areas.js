@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { useDispatch, useSelect } from '@wordpress/data';
-import { widget } from '@wordpress/icons';
+import { layout } from '@wordpress/icons';
 import { BlockIcon } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -40,22 +40,20 @@ export default function BlockAreas() {
 		<>
 			<div className="edit-widgets-block-areas">
 				<div className="edit-widgets-block-areas__top-container">
-					<BlockIcon icon={ widget } />
+					<BlockIcon icon={ layout } />
 					<div>
 						<p>
 							{ __(
-								'Block areas (also known as “Widget Areas”) are global locations in your site’s layout that can accept blocks. These vary by theme, but are typically places like your sidebar or footer.'
+								'Block Areas (also known as "Widget Areas") are global parts in your site\'s layout that can accept blocks. These vary by theme, but are typically parts like your Sidebar or Footer.'
 							) }
 						</p>
-						<span>
-							{ hasBlockAreas
-								? __(
-										'Your theme contains the following block areas:'
-								  )
-								: __(
-										'Your theme does not contain block areas.'
-								  ) }
-						</span>
+						{ ! hasBlockAreas && (
+							<p>
+								{ __(
+									'Your theme does not contain block areas.'
+								) }
+							</p>
+						) }
 					</div>
 				</div>
 				{ hasBlockAreas && (

@@ -8,6 +8,8 @@ import classnames from 'classnames';
 import { useSelect } from '@wordpress/data';
 import { useRef } from '@wordpress/element';
 import { useViewportMatch } from '@wordpress/compose';
+import { hasBlockSupport } from '@wordpress/blocks';
+
 /**
  * Internal dependencies
  */
@@ -22,12 +24,15 @@ export default function BlockToolbar( { hideDragHandle } ) {
 	const {
 		blockClientIds,
 		blockClientId,
+		blockType,
 		hasFixedToolbar,
 		isValid,
 		mode,
 		moverDirection,
 	} = useSelect( ( select ) => {
+		const { getBlockType } = select( 'core/blocks' );
 		const {
+			getBlockName,
 			getBlockMode,
 			getSelectedBlockClientIds,
 			isBlockValid,
@@ -45,6 +50,9 @@ export default function BlockToolbar( { hideDragHandle } ) {
 		return {
 			blockClientIds: selectedBlockClientIds,
 			blockClientId: selectedBlockClientId,
+			blockType:
+				selectedBlockClientId &&
+				getBlockType( getBlockName( selectedBlockClientId ) ),
 			hasFixedToolbar: getSettings().hasFixedToolbar,
 			rootClientId: blockRootClientId,
 			isValid:
@@ -71,6 +79,12 @@ export default function BlockToolbar( { hideDragHandle } ) {
 
 	const displayHeaderToolbar =
 		useViewportMatch( 'medium', '<' ) || hasFixedToolbar;
+
+	if ( blockType ) {
+		if ( ! hasBlockSupport( blockType, '__experimentalToolbar', true ) ) {
+			return null;
+		}
+	}
 
 	const shouldShowMovers = displayHeaderToolbar || showMovers;
 
